@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.5.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check backend
+        run: pnpm --filter @text-to-speak/backend exec tsc --noEmit
+
+      - name: Type check frontend
+        run: pnpm --filter @text-to-speak/frontend exec tsc --noEmit
+
+      - name: Build backend
+        run: pnpm --filter @text-to-speak/backend build
+
+      - name: Build frontend
+        run: pnpm --filter @text-to-speak/frontend build
+        env:
+          VITE_WS_URL: wss://placeholder.railway.app
+
+      - name: Test backend
+        run: pnpm --filter @text-to-speak/backend test
+        env:
+          NODE_ENV: test

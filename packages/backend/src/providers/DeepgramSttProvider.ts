@@ -4,10 +4,22 @@ import type { SttProvider, SttStreamConfig, SttStream } from './SttProvider';
 
 class DeepgramSttStream extends EventEmitter implements SttStream {
   private connection: ReturnType<ReturnType<typeof createClient>['listen']['live']>;
+  private isReady = false;
+  private buffer: Buffer[] = [];
 
   constructor(connection: ReturnType<ReturnType<typeof createClient>['listen']['live']>) {
     super();
     this.connection = connection;
+
+    this.connection.on(LiveTranscriptionEvents.Open, () => {
+      this.isReady = true;
+      // Flush buffered audio chunks
+      for (const chunk of this.buffer) {
+        this.connection.send(chunk);
+      }
+      this.buffer = [];
+      this.emit('open');
+    });
 
     this.connection.on(LiveTranscriptionEvents.Results, (data: unknown) => {
       const result = data as {
@@ -36,14 +48,30 @@ class DeepgramSttStream extends EventEmitter implements SttStream {
       const error = err as { message?: string };
       this.emit('error', { message: error?.message ?? 'Unknown error' });
     });
+
+    this.connection.on(LiveTranscriptionEvents.Close, () => {
+      this.isReady = false;
+      this.buffer = [];
+      this.emit('close');
+    });
   }
 
   sendAudio(chunk: Buffer): void {
-    this.connection.send(chunk);
+    if (this.isReady) {
+      this.connection.send(chunk);
+    } else {
+      this.buffer.push(chunk);
+    }
   }
 
   stop(): void {
-    this.connection.finish();
+    this.buffer = [];
+    this.isReady = false;
+    try {
+      this.connection.finish();
+    } catch {
+      // Connection may already be closed
+    }
   }
 }
 

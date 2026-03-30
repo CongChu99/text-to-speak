@@ -18,9 +18,9 @@
   "wikiUrl": null,
   "wikiGitUrl": null,
   "taskLoop": {
-    "currentTaskId": "text-to-speak-aar.1",
-    "currentTaskSlug": "project-setup",
-    "currentBranch": "feat/text-to-speak-aar.1-project-setup",
+    "currentTaskId": "text-to-speak-aar.8",
+    "currentTaskSlug": "deploy-railway-backend-vercel-frontend-github-actions-ci",
+    "currentBranch": "feat/text-to-speak-aar.8-deploy-railway-backend-vercel-frontend-github-actions-ci",
     "subState": "CODING",
     "completedTasks": [],
     "failedTasks": []

@@ -1,39 +1,52 @@
 interface Props {
   isActive: boolean
+  isDisabled: boolean
   onPress: () => void
   onRelease: () => void
 }
 
-export function SpeakButton({ isActive, onPress, onRelease }: Props) {
+export function SpeakButton({ isActive, isDisabled, onPress, onRelease }: Props) {
   return (
-    <button
-      className={`
-        w-20 h-20 rounded-full flex flex-col items-center justify-center
-        select-none touch-none transition-all duration-150
-        ${isActive
-          ? 'bg-blue-500 scale-95 shadow-lg shadow-blue-500/50'
-          : 'bg-slate-700 hover:bg-slate-600 shadow-md'
-        }
-      `}
-      aria-label={isActive ? 'Speaking' : 'Hold to speak'}
-      onMouseDown={onPress}
-      onMouseUp={onRelease}
-      onMouseLeave={() => isActive && onRelease()}
-      onTouchStart={(e) => { e.preventDefault(); onPress() }}
-      onTouchEnd={(e) => { e.preventDefault(); onRelease() }}
-    >
-      <MicIcon isActive={isActive} />
-      <span className="text-white text-xs mt-1 font-medium">
-        {isActive ? 'Speaking' : 'Hold to speak'}
-      </span>
-    </button>
+    <div className="relative flex items-center justify-center">
+      {/* Pulse rings when active */}
+      {isActive && (
+        <>
+          <div className="absolute w-24 h-24 rounded-full border-2 border-blue-400/30 animate-pulse-ring" />
+          <div className="absolute w-24 h-24 rounded-full border-2 border-blue-400/20 animate-pulse-ring" style={{ animationDelay: '0.5s' }} />
+        </>
+      )}
+
+      <button
+        className={`
+          relative z-10 w-[72px] h-[72px] rounded-full flex flex-col items-center justify-center
+          select-none touch-none transition-all duration-200 ease-out
+          ${isDisabled
+            ? 'bg-slate-800 cursor-not-allowed opacity-50'
+            : isActive
+              ? 'bg-gradient-to-br from-blue-500 to-blue-600 scale-90 shadow-[0_0_40px_rgba(59,130,246,0.5)]'
+              : 'bg-gradient-to-br from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 hover:scale-105 shadow-lg shadow-black/30 active:scale-95'
+          }
+        `}
+        aria-label={isActive ? 'Speaking — release to stop' : 'Hold to speak'}
+        disabled={isDisabled}
+        onMouseDown={() => !isDisabled && onPress()}
+        onMouseUp={() => !isDisabled && onRelease()}
+        onMouseLeave={() => isActive && onRelease()}
+        onTouchStart={(e) => { e.preventDefault(); if (!isDisabled) onPress() }}
+        onTouchEnd={(e) => { e.preventDefault(); if (!isDisabled) onRelease() }}
+      >
+        <MicIcon isActive={isActive} />
+      </button>
+    </div>
   )
 }
 
 function MicIcon({ isActive }: { isActive: boolean }) {
   return (
     <svg
-      className={`w-8 h-8 ${isActive ? 'text-white animate-pulse' : 'text-slate-300'}`}
+      className={`w-7 h-7 transition-colors duration-200 ${
+        isActive ? 'text-white' : 'text-slate-300'
+      }`}
       fill="currentColor"
       viewBox="0 0 24 24"
     >
