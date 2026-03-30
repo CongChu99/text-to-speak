@@ -5,6 +5,11 @@ const BACKEND_URL = process.env.BACKEND_URL ?? 'http://localhost:3001';
 
 export default defineConfig({
   plugins: [react()],
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: ['./src/test-setup.ts'],
+  },
   server: {
     port: 5173,
     proxy: {
