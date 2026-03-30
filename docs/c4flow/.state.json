@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "currentState": "CODE_LOOP",
+  "feature": {
+    "name": "Speech Translation Web App",
+    "slug": "speech-translation-web-app",
+    "description": "Web application cho phép người A nói bằng một ngôn ngữ, AI dịch câu đó sang ngôn ngữ khác, rồi phát âm thanh cho người B nghe bằng câu đã dịch."
+  },
+  "mode": "research",
+  "startedAt": "2026-03-30",
+  "completedStates": ["RESEARCH", "SPEC", "DESIGN", "BEADS"],
+  "failedAttempts": 0,
+  "beadsEpic": "text-to-speak-aar",
+  "doltRemote": "https://doltremoteapi.dolthub.com/congcp/text-to-speak",
+  "worktree": null,
+  "prNumber": null,
+  "lastError": null,
+  "wikiUrl": null,
+  "wikiGitUrl": null,
+  "taskLoop": {
+    "currentTaskId": "text-to-speak-aar.1",
+    "currentTaskSlug": "project-setup",
+    "currentBranch": "feat/text-to-speak-aar.1-project-setup",
+    "subState": "CODING",
+    "completedTasks": [],
+    "failedTasks": []
+  }
+}

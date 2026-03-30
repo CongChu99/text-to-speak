@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "server",
+  "dolt_database": "text_to_speak",
+  "project_id": "f419c6c5-d10e-46cd-8c57-ef85fdbcc741"
+}
