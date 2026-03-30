@@ -2,3 +2,23 @@
 # Dolt database files (added by bd init)
 .dolt/
 *.db
+
+# Dependencies
+node_modules/
+packages/*/node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+
+# Environment
+.env
+.env.local
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
